@@ -1,0 +1,35 @@
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 162, 22, 0.15);
+  border: 2px solid #FFA216;
+  color: #FFA216;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 15px rgba(255, 162, 22, 0.3);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(8px);
+  font-size: 1rem;
+  letter-spacing: 0;
+  animation: none !important;
+  transform: none !important;
+}
+
+.music-btn:hover {
+  background: rgba(255, 162, 22, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 162, 22, 0.5);
+  transform: none !important;
+}
+
+.music-btn:active {
+  transform: scale(0.95) !important;
+}

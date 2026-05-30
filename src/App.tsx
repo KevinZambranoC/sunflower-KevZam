@@ -3,8 +3,12 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import './App.css'
 import SunflowerCanvas from './SunflowerCanvas'
+import MusicButton from './MusicButton'
+import { useYouTubePlayer } from './useYouTubePlayer'
 
 gsap.registerPlugin(useGSAP)
+
+const VIDEO_ID = '1iDrQta26zo' // Milky - Just The Way You Are (Official Audio)
 
 export default function App() {
   const [phase, setPhase] = useState<'initial' | 'drawing'>('initial')
@@ -13,6 +17,8 @@ export default function App() {
   const initialRef = useRef<HTMLDivElement>(null)
   const drawingRef = useRef<HTMLDivElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
+
+  const { play, togglePause, getState } = useYouTubePlayer(VIDEO_ID)
 
   useGSAP(() => {
     if (!btnRef.current) return
@@ -33,6 +39,7 @@ export default function App() {
     if (!init || !drawing) return
 
     gsap.killTweensOf(btnRef.current)
+    play()
 
     gsap.to(init, {
       opacity: 0,
@@ -50,7 +57,7 @@ export default function App() {
         setPhase('drawing')
       },
     })
-  }, [speed])
+  }, [speed, play])
 
   return (
     <>
@@ -82,13 +89,13 @@ export default function App() {
         {phase === 'drawing' && <SunflowerCanvas speed={drawingSpeed} />}
       </div>
 
+      {phase === 'drawing' && (
+        <MusicButton togglePause={togglePause} getState={getState} />
+      )}
+
       <div className="credits">
         by{' '}
-        <a
-          href="https://github.com/KevinZam"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://github.com/KevinZambranoC" target="_blank" rel="noreferrer">
           KevinZam
         </a>
       </div>
