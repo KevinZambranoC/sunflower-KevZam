@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 
 declare global {
   interface Window {
@@ -8,13 +8,16 @@ declare global {
   }
 }
 
-export function useYouTubePlayer(videoId: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const playerRef = useRef<any>(null)
-  const readyRef = useRef(false)
-  const pendingPlay = useRef(false)
+// Module-level singletons so StrictMode double-mount doesn't tear down the player.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let globalPlayer: any = null
+let globalReady = false
+let pendingPlay = false
 
+export function useYouTubePlayer(videoId: string) {
   useEffect(() => {
+    if (globalPlayer) return
+
     if (!document.getElementById('yt-api-script')) {
       const script = document.createElement('script')
       script.id = 'yt-api-script'
@@ -22,14 +25,17 @@ export function useYouTubePlayer(videoId: string) {
       document.body.appendChild(script)
     }
 
-    const container = document.createElement('div')
-    container.id = 'yt-player-container'
-    container.style.cssText =
-      'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;'
-    document.body.appendChild(container)
+    if (!document.getElementById('yt-player-container')) {
+      const container = document.createElement('div')
+      container.id = 'yt-player-container'
+      container.style.cssText =
+        'position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;'
+      document.body.appendChild(container)
+    }
 
     const init = () => {
-      playerRef.current = new window.YT.Player('yt-player-container', {
+      if (globalPlayer) return
+      globalPlayer = new window.YT.Player('yt-player-container', {
         videoId,
         playerVars: {
           autoplay: 0,
@@ -41,11 +47,19 @@ export function useYouTubePlayer(videoId: string) {
         },
         events: {
           onReady: () => {
-            readyRef.current = true
-            playerRef.current?.setVolume(60)
-            if (pendingPlay.current) {
-              playerRef.current?.playVideo()
-              pendingPlay.current = false
+            globalReady = true
+            try {
+              globalPlayer.setVolume(60)
+            } catch {
+              /* ignore */
+            }
+            if (pendingPlay) {
+              try {
+                globalPlayer.playVideo()
+              } catch {
+                /* ignore */
+              }
+              pendingPlay = false
             }
           },
         },
@@ -61,32 +75,39 @@ export function useYouTubePlayer(videoId: string) {
         init()
       }
     }
-
-    return () => {
-      playerRef.current?.destroy()
-      document.getElementById('yt-player-container')?.remove()
-    }
+    // No cleanup: the player is a singleton that lives for the app lifetime.
   }, [videoId])
 
   const play = useCallback(() => {
-    if (readyRef.current) {
-      playerRef.current?.playVideo()
-    } else {
-      pendingPlay.current = true
+    if (globalReady && typeof globalPlayer?.playVideo === 'function') {
+      try {
+        globalPlayer.playVideo()
+        return
+      } catch {
+        /* fall through to pending */
+      }
     }
+    pendingPlay = true
   }, [])
 
   const togglePause = useCallback(() => {
-    const state = playerRef.current?.getPlayerState()
-    if (state === 1) {
-      playerRef.current?.pauseVideo()
-    } else {
-      playerRef.current?.playVideo()
+    if (typeof globalPlayer?.getPlayerState !== 'function') return
+    try {
+      const state = globalPlayer.getPlayerState()
+      if (state === 1) globalPlayer.pauseVideo()
+      else globalPlayer.playVideo()
+    } catch {
+      /* ignore */
     }
   }, [])
 
   const getState = useCallback(() => {
-    return playerRef.current?.getPlayerState() ?? -1
+    if (typeof globalPlayer?.getPlayerState !== 'function') return -1
+    try {
+      return globalPlayer.getPlayerState()
+    } catch {
+      return -1
+    }
   }, [])
 
   return { play, togglePause, getState }

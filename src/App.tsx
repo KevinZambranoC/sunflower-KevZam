@@ -12,8 +12,8 @@ const VIDEO_ID = '1iDrQta26zo' // Milky - Just The Way You Are (Official Audio)
 
 export default function App() {
   const [phase, setPhase] = useState<'initial' | 'drawing'>('initial')
-  const [speed, setSpeed] = useState(5)
-  const [drawingSpeed, setDrawingSpeed] = useState(5)
+  const [speed, setSpeed] = useState(2)
+  const [drawingSpeed, setDrawingSpeed] = useState(2)
   const initialRef = useRef<HTMLDivElement>(null)
   const drawingRef = useRef<HTMLDivElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
@@ -62,10 +62,10 @@ export default function App() {
   return (
     <>
       <div className="initial-interface" ref={initialRef}>
-        <h1 className="page-title">Un girasol para ti mi socia, para alegrarte el día 🌻</h1>
-        <img src="/dog.gif" alt="Perro con girasol" className="dog-gif" />
+        <h1 className="page-title">Para que florezca nuestro presente, un detalle especialmente para vos 💐</h1>
+        <img src="/dog.gif" alt="Perro con ramo" className="dog-gif" />
         <button ref={btnRef} onClick={handleOpen}>
-          Abrir girasol
+          Armar el ramo
         </button>
         <div className="speed-control">
           <div className="speed-label">Velocidad de la flor:</div>
