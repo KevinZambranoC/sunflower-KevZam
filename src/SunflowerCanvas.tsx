@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import './App.css'
+import YellowFlowersBackground from './YellowFlowersBackground'
 
 interface Props {
   speed: number
@@ -11,8 +12,8 @@ const WRAP_X = 500
 const WRAP_Y = 820
 
 type Step = () => void
-type RoseHue = 'red' | 'pink' | 'white'
-type TulipHue = 'purple' | 'red' | 'yellow'
+type RoseHue = 'yellow' | 'gold' | 'cream'
+type TulipHue = 'yellow' | 'gold' | 'lemon'
 
 interface FlowerSpec {
   type: 'rose' | 'gerbera' | 'tulip'
@@ -24,31 +25,31 @@ interface FlowerSpec {
 
 const ARRANGEMENT: FlowerSpec[] = [
   // back row (tallest)
-  { type: 'rose', angle: -8, length: 365, scale: 0.7, color: 'red' },
-  { type: 'tulip', angle: 8, length: 360, scale: 0.7, color: 'purple' },
-  { type: 'gerbera', angle: -22, length: 345, scale: 0.6, color: '#FF8C00' },
+  { type: 'rose', angle: -8, length: 365, scale: 0.7, color: 'yellow' },
+  { type: 'tulip', angle: 8, length: 360, scale: 0.7, color: 'gold' },
+  { type: 'gerbera', angle: -22, length: 345, scale: 0.6, color: '#FFC107' },
   { type: 'gerbera', angle: 22, length: 345, scale: 0.6, color: '#FFD700' },
-  { type: 'rose', angle: -36, length: 320, scale: 0.6, color: 'white' },
+  { type: 'rose', angle: -36, length: 320, scale: 0.6, color: 'cream' },
   { type: 'tulip', angle: 36, length: 320, scale: 0.6, color: 'yellow' },
   // upper mid (fillers between back and mid)
-  { type: 'rose', angle: -14, length: 320, scale: 0.55, color: 'pink' },
-  { type: 'tulip', angle: 14, length: 320, scale: 0.55, color: 'red' },
+  { type: 'rose', angle: -14, length: 320, scale: 0.55, color: 'gold' },
+  { type: 'tulip', angle: 14, length: 320, scale: 0.55, color: 'lemon' },
   // mid row
-  { type: 'tulip', angle: -48, length: 290, scale: 0.6, color: 'red' },
-  { type: 'rose', angle: 48, length: 290, scale: 0.65, color: 'pink' },
-  { type: 'rose', angle: 0, length: 310, scale: 0.75, color: 'pink' },
-  { type: 'gerbera', angle: -30, length: 280, scale: 0.55, color: '#FF1493' },
-  { type: 'gerbera', angle: 30, length: 280, scale: 0.55, color: '#FF8C00' },
+  { type: 'tulip', angle: -48, length: 290, scale: 0.6, color: 'gold' },
+  { type: 'rose', angle: 48, length: 290, scale: 0.65, color: 'yellow' },
+  { type: 'rose', angle: 0, length: 310, scale: 0.75, color: 'gold' },
+  { type: 'gerbera', angle: -30, length: 280, scale: 0.55, color: '#FFEB3B' },
+  { type: 'gerbera', angle: 30, length: 280, scale: 0.55, color: '#FBC02D' },
   // front sides (shorter, fanning out)
-  { type: 'gerbera', angle: -64, length: 235, scale: 0.55, color: '#FF1493' },
+  { type: 'gerbera', angle: -64, length: 235, scale: 0.55, color: '#FFD700' },
   { type: 'tulip', angle: 64, length: 235, scale: 0.55, color: 'yellow' },
-  { type: 'rose', angle: -56, length: 250, scale: 0.5, color: 'red' },
-  { type: 'tulip', angle: 56, length: 250, scale: 0.5, color: 'purple' },
+  { type: 'rose', angle: -56, length: 250, scale: 0.5, color: 'yellow' },
+  { type: 'tulip', angle: 56, length: 250, scale: 0.5, color: 'lemon' },
   // front low
-  { type: 'rose', angle: -20, length: 235, scale: 0.55, color: 'red' },
-  { type: 'gerbera', angle: 20, length: 245, scale: 0.55, color: '#FFD700' },
-  { type: 'tulip', angle: -8, length: 245, scale: 0.5, color: 'yellow' },
-  { type: 'rose', angle: 8, length: 250, scale: 0.55, color: 'white' },
+  { type: 'rose', angle: -20, length: 235, scale: 0.55, color: 'cream' },
+  { type: 'gerbera', angle: 20, length: 245, scale: 0.55, color: '#FFC107' },
+  { type: 'tulip', angle: -8, length: 245, scale: 0.5, color: 'gold' },
+  { type: 'rose', angle: 8, length: 250, scale: 0.55, color: 'yellow' },
 ]
 
 function drawBouquet(
@@ -57,8 +58,7 @@ function drawBouquet(
   onDone: () => void
 ) {
   const ctx = canvas.getContext('2d')!
-  ctx.fillStyle = '#000'
-  ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
+  ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
 
   const delay = Math.max(3, 40 - speed * 3)
   let cancelled = false
@@ -111,9 +111,9 @@ function drawBouquet(
 
   function rose(cx: number, cy: number, scale: number, hue: RoseHue) {
     const palettes: Record<RoseHue, string[]> = {
-      red: ['#5A0010', '#8B0000', '#B22222', '#DC143C', '#FF4D6D'],
-      pink: ['#6E1E48', '#AD1457', '#E91E63', '#F06292', '#F8BBD0'],
-      white: ['#8B7355', '#D4B896', '#F5DEB3', '#FAF0E6', '#FFFAF0'],
+      yellow: ['#8D6E00', '#C79100', '#FBC02D', '#FFEB3B', '#FFF59D'],
+      gold: ['#7A4F00', '#B8860B', '#F9A825', '#FFC107', '#FFE082'],
+      cream: ['#9E8A3A', '#E6C95C', '#FFE680', '#FFF3B0', '#FFFBE0'],
     }
     const cols = palettes[hue]
     const layers = [
@@ -123,7 +123,7 @@ function drawBouquet(
       { r: 40, petals: 9, c: cols[3] },
       { r: 52, petals: 12, c: cols[4] },
     ]
-    const stroke = hue === 'white' ? '#8B7355' : '#3A0008'
+    const stroke = '#6B4E00'
     layers.forEach((layer) => {
       for (let p = 0; p < layer.petals; p++) {
         const angle = (p / layer.petals) * Math.PI * 2 + layer.r * 0.05
@@ -207,9 +207,9 @@ function drawBouquet(
 
   function tulip(cx: number, cy: number, scale: number, hue: TulipHue) {
     const palettes: Record<TulipHue, [string, string, string, string]> = {
-      purple: ['#7B1FA2', '#9C27B0', '#BA68C8', '#3B0058'],
-      red: ['#B22222', '#DC143C', '#FF6347', '#5C0000'],
       yellow: ['#DAA520', '#FFD700', '#FFE066', '#7A5C00'],
+      gold: ['#E69500', '#FFB300', '#FFCA28', '#7A4A00'],
+      lemon: ['#E6D200', '#FFEE58', '#FFF59D', '#7A6E00'],
     }
     const [c1, c2, c3, stroke] = palettes[hue]
     const petals = [
@@ -367,9 +367,9 @@ export default function SunflowerCanvas({ speed }: Props) {
     const el = smileRef.current
     if (!el) return
     const lines = [
-      'Me gustas porque tienes ese no sé qué,',
-      'que se encuentra solo en las personas',
-      'que vale la pena descubrir.',
+      'Feliz día de las flores amarillas',
+      'mi FlanchisFlu 🌻',
+      'Te amo muchísimo mi amorcito ❤️',
     ]
     el.innerHTML = ''
 
@@ -384,7 +384,9 @@ export default function SunflowerCanvas({ speed }: Props) {
         return
       }
 
-      line.split('').forEach((char) => {
+      // keep emoji (e.g. ❤️) as a single glyph instead of splitting surrogate pairs
+      const chars = line.match(/\p{Extended_Pictographic}️?|./gu) ?? []
+      chars.forEach((char) => {
         const span = document.createElement('span')
         span.className = 'letter'
         span.innerHTML = char === ' ' ? '&nbsp;' : char
@@ -419,6 +421,7 @@ export default function SunflowerCanvas({ speed }: Props) {
           position: 'relative',
         }}
       >
+        <YellowFlowersBackground />
         <canvas
           id="turtleCanvas"
           ref={canvasRef}
