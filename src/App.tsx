@@ -62,10 +62,10 @@ export default function App() {
   return (
     <>
       <div className="initial-interface" ref={initialRef}>
-        <h1 className="page-title">Para que florezca nuestro presente, un detalle especialmente para vos 💐</h1>
-        <img src="/dog.gif" alt="Perro con ramo" className="dog-gif" />
+        <h1 className="page-title">Ya quisiera hacer como la Rosa de Guadalupe, aparecerme como ella cerca de ti, pero para darte este detalle que te tengo 🎁</h1>
+        <img src="/sunflower.jpg" alt="Nosotros" className="dog-gif" />
         <button ref={btnRef} onClick={handleOpen}>
-          Armar el ramo
+          Abrir regalo
         </button>
         <div className="speed-control">
           <div className="speed-label">Velocidad de la flor:</div>
