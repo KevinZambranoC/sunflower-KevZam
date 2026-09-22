@@ -62,13 +62,13 @@ export default function App() {
   return (
     <>
       <div className="initial-interface" ref={initialRef}>
-        <h1 className="page-title">Ya quisiera hacer como la Rosa de Guadalupe, aparecerme como ella cerca de ti, pero para darte este detalle que te tengo 🎁</h1>
+        <h1 className="page-title">Ya quisiera hacer como la Rosa de Guadalupe, aparecerme cerca de ti, pero para darte este detalle que te tengo 🎁</h1>
         <img src="/sunflower.jpg" alt="Nosotros" className="dog-gif" />
         <button ref={btnRef} onClick={handleOpen}>
-          Abrir regalo
+          Abrir detalle
         </button>
         <div className="speed-control">
-          <div className="speed-label">Velocidad de la flor:</div>
+          <div className="speed-label">Velocidad del detalle:</div>
           <input
             type="range"
             className="speed-slider"
