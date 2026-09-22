@@ -92,13 +92,6 @@ export default function App() {
       {phase === 'drawing' && (
         <MusicButton togglePause={togglePause} getState={getState} />
       )}
-
-      <div className="credits">
-        by{' '}
-        <a href="https://github.com/KevinZambranoC" target="_blank" rel="noreferrer">
-          KevinZam
-        </a>
-      </div>
     </>
   )
 }

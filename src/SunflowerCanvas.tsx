@@ -369,7 +369,7 @@ export default function SunflowerCanvas({ speed }: Props) {
     const lines = [
       'Feliz día de las flores amarillas',
       'mi FlanchisFlu 🌻',
-      'Te amo muchísimo mi amorcito ❤️',
+      'Te quiero muchísimo mi amorcito ❤️',
     ]
     el.innerHTML = ''
 
